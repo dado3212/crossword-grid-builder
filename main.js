@@ -146,9 +146,52 @@ function gridCellHoverChange(cell, isHovered) {
     }
 }
 
+function fetchHistoricGrids(day_of_week, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'php/historical_data.php', true);
+    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function (data) {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (data.target.status !== 200) {
+                // Handle error
+                // try {
+                //     errorDiv.innerHTML = JSON.parse(data.target.response)['message'];
+                // } catch {
+                //     // If it's malformed it's because I'm echoing something, just dump it all
+                //     errorDiv.innerHTML = data.target.response;
+                // }
+                // errorDiv.style.display = 'block';
+            } else {
+                callback(JSON.parse(data.target.response)['grids']);
+
+                // try {
+                //     const bingoIndex = JSON.parse(data.target.response)['index'];
+
+                //     // display the share screen
+                //     document.querySelector('.popup-content label').style.display = 'none';
+                //     document.querySelector('.popup-content input').style.display = 'none';
+                //     document.querySelector('.popup-content button').style.display = 'none';
+                //     document.querySelector('#create').disabled = false;
+                    
+                //     document.querySelector('.shareLink').style.display = 'block';
+                //     document.querySelector('.shareLink').href = 'https://alexbeals.com/projects/bingo/?b=' + bingoIndex;
+                // } catch {
+                //     // If it's malformed it's because I'm echoing something, just dump it all
+                //     errorDiv.innerHTML = data.target.response;
+                //     errorDiv.style.display = 'block';
+                // }
+            }
+        }
+    }
+    xhr.send('day=' + day_of_week);
+}
+
 window.onload = () => {
-    // Build the historical grids info
-    historicalGrids = JSON.parse(historicalCrosswords)['Monday'];
+    // Fetch the historical grids info
+    fetchHistoricGrids('Monday', (grids) => {
+        historicalGrids = grids;
+        renderGrid();
+    });
 
     // Build the grid, both UI and code
     const gridElement = document.getElementById('grid');
