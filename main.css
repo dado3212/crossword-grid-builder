@@ -1,0 +1,46 @@
+#grid {
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    width: calc((15px + 1px * 2) * 15);
+}
+
+.row {
+    display: flex;
+}
+
+.cell {
+    width: 15px;
+    height: 15px;
+    border: 1px solid black;
+
+    cursor: pointer;
+}
+.cell.selected {
+    background-color: black;
+}
+.cell.selected.hovered {
+    background-color: #333;
+}
+.cell:not(.selected).hovered {
+    background-color: #ccc;
+}
+
+.cell .popularity-display {
+    width: 100%;
+    height: 100%;
+}
+.cell.selected .popularity-display {
+    display: none;
+}
+.cell.hovered .popularity-display {
+    display: none;
+}
+
+button {
+    cursor: pointer;
+}
+
+button.selected {
+    background-color: gray;
+}
