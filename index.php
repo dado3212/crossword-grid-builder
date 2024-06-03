@@ -64,25 +64,25 @@
         </div>
         <div id="date">
             <div>Day of the Week</div>
-            <button title="Rotational" class="selected" onclick="dayClick(this)">
+            <button title="Monday" data-day="Monday" class="selected" onclick="dayClick(this)">
                 Mo
             </button>
-            <button title="Mirror" onclick="dayClick(this)">
+            <button title="Tuesday" data-day="Tuesday" onclick="dayClick(this)">
                 Tu
             </button>
-            <button title="Mirror" onclick="dayClick(this)">
+            <button title="Wednesday" data-day="Wednesday" onclick="dayClick(this)">
                 We
             </button>
-            <button title="Mirror" onclick="dayClick(this)">
+            <button title="Thursday" data-day="Thursday" onclick="dayClick(this)">
                 Th
             </button>
-            <button title="Mirror" onclick="dayClick(this)">
+            <button title="Friday" data-day="Friday" onclick="dayClick(this)">
                 Fr
             </button>
-            <button title="Mirror" onclick="dayClick(this)">
+            <button title="Saturday" data-day="Saturday" onclick="dayClick(this)">
                 Sa
             </button>
-            <button title="Mirror" onclick="dayClick(this)">
+            <button title="Sunday" data-day="Sunday" onclick="dayClick(this)">
                 Su
             </button>
         </div>

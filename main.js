@@ -101,7 +101,8 @@ function dayClick(day) {
     document.querySelectorAll('#date button').forEach((e) => e.classList.remove('selected'));
     day.classList.add('selected');
 
-    // TODO: Actually do something with this (needs server hookups)
+    historicalGrids = JSON.parse(historicalCrosswords)[day.dataset.day];
+    renderGrid();
 }
 
 function getCorrespondingCell(cell) {
