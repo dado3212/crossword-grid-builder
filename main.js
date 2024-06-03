@@ -7,7 +7,6 @@ const formattingStates = {
 
 let format = formattingStates.ROTATIONAL;
 
-/** Temporary for not having internet */
 let historicalGrids = [];
 
 function createEmptyGrid() {
@@ -20,27 +19,6 @@ function createEmptyGrid() {
     }
     return emptyGrid;
 }
-
-function generateHistoricalGrid(format) {
-    // For now, just assume rotational
-    const grid = createEmptyGrid();
-    for (let r = 0; r < 8; r++) {
-        for (let c = 0; c < 15; c++) {
-            const isFilled = Math.random() >= 0.5;
-            grid[r][c] = isFilled;
-            grid[15 - r - 1][15 - c - 1] = isFilled;
-        }
-    }
-    return grid;
-}
-
-for (let i = 0; i < 20; i++) {
-    historicalGrids.push(generateHistoricalGrid());
-}
-
-historicalGrids = [
-[[false, false, false, true, false, false, false, true, false, false, false, true, false, false, false], [false, false, false, false, false, false, false, true, false, false, false, false, false, false, false], [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], [true, true, true, false, false, false, false, false, false, false, false, false, true, true, true], [false, false, false, true, true, false, false, false, false, true, true, true, false, false, false], [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], [false, false, false, false, false, true, true, false, false, false, false, false, false, false, false], [true, true, false, false, false, false, false, true, false, false, false, false, false, true, true], [false, false, false, false, false, false, false, false, true, true, false, false, false, false, false], [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], [false, false, false, true, true, true, false, false, false, false, true, true, false, false, false], [true, true, true, false, false, false, false, false, false, false, false, false, true, true, true], [false, false, false, false, false, false, false, false, false, false, false, false, false, false, false], [false, false, false, false, false, false, false, true, false, false, false, false, false, false, false], [false, false, false, true, false, false, false, true, false, false, false, true, false, false, false]]
-];
 
 // For a given historical grid it checks it against the currently selected
 // grid and returns a boolean if it's still a plausible end state
@@ -168,6 +146,9 @@ function gridCellHoverChange(cell, isHovered) {
 }
 
 window.onload = () => {
+    // Build the historical grids info
+    historicalGrids = JSON.parse(historicalCrosswords)['Monday'];
+
     // Build the grid, both UI and code
     const gridElement = document.getElementById('grid');
     for (let r = 0; r < 15; r++) {

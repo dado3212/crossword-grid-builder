@@ -10,6 +10,44 @@
         <title>Crossword Builder</title>
         <link rel="stylesheet" type="text/css" href="main.css">
         <script src="main.js"></script>
+        <script>
+            <?php
+                // Fetch from PHP and just inline it for JS
+                include("secret.php");
+
+                error_reporting(E_ALL);
+                ini_set('display_errors', 'On');
+
+                $PDO = getDatabase();
+                $historical_crosswords = $PDO->prepare(
+                    "SELECT `grid`, `day_of_week`, `rows`, `columns` FROM historical_crosswords"
+                );
+                $historical_crosswords->execute();
+
+                $crossword_data = [];
+                foreach ($historical_crosswords->fetchAll() as $crossword) {
+                    $day_of_week = $crossword['day_of_week'];
+                    if (!array_key_exists($day_of_week, $crossword_data)) {
+                        $crossword_data[$day_of_week] = [];
+                    }
+                    $grid = [];
+                    $row_index = -1;
+                    for ($i = 0; $i < strlen($crossword['grid']); $i++) {
+                        if ($i % $crossword['rows'] === 0) {
+                            $grid[] = [];
+                            $row_index += 1;
+                        }
+                        if ($crossword['grid'][$i] === '0') {
+                            $grid[$row_index][] = false;
+                        } else {
+                            $grid[$row_index][] = true;
+                        }
+                    }
+                    $crossword_data[$day_of_week][] = $grid;
+                }
+                echo 'const historicalCrosswords = \'' . json_encode($crossword_data) . '\';';
+            ?>
+        </script>
     </head>
     <body>
         <div id="grid">
