@@ -304,21 +304,23 @@ function gridCellHoverChange(cell, isHovered) {
 }
 
 function fetchHistoricGrids() {
+    // Start the loading indicator
+    const loadingElement = document.getElementById('loading');
+    loadingElement.style.display = 'block';
+    loadingElement.classList.remove('error');
+    loadingElement.innerHTML = 'Loading...';
+
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'php/historical_data.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
     xhr.onreadystatechange = function (data) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (data.target.status !== 200) {
-                // Handle error
-                // try {
-                //     errorDiv.innerHTML = JSON.parse(data.target.response)['message'];
-                // } catch {
-                //     // If it's malformed it's because I'm echoing something, just dump it all
-                //     errorDiv.innerHTML = data.target.response;
-                // }
-                // errorDiv.style.display = 'block';
+                loadingElement.innerHTML = 'Error: ' + JSON.parse(data.target.response)['message'];
+                loadingElement.classList.add('error');
             } else {
+                loadingElement.style.display = 'none';
+
                 const info = JSON.parse(data.target.response);
                 historicalGrids = info['grids'];
                 const wordRange = info['word_range'];
@@ -327,23 +329,6 @@ function fetchHistoricGrids() {
                 document.querySelector('#gridInfo #blocks').title = blockRange[0] + ' - ' + blockRange[1];
 
                 renderGrid();
-
-                // try {
-                //     const bingoIndex = JSON.parse(data.target.response)['index'];
-
-                //     // display the share screen
-                //     document.querySelector('.popup-content label').style.display = 'none';
-                //     document.querySelector('.popup-content input').style.display = 'none';
-                //     document.querySelector('.popup-content button').style.display = 'none';
-                //     document.querySelector('#create').disabled = false;
-                    
-                //     document.querySelector('.shareLink').style.display = 'block';
-                //     document.querySelector('.shareLink').href = 'https://alexbeals.com/projects/bingo/?b=' + bingoIndex;
-                // } catch {
-                //     // If it's malformed it's because I'm echoing something, just dump it all
-                //     errorDiv.innerHTML = data.target.response;
-                //     errorDiv.style.display = 'block';
-                // }
             }
         }
     }

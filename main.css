@@ -40,6 +40,16 @@
             background-color: #ac121273;
         }
     }
+
+    #loading {
+        margin-top: 15px;
+        max-width: 130px;
+
+        &.error {
+            padding: 5px;
+            background-color: #ac121273;
+        }
+    }
 }
 
 #grid {

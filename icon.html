@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <style>
+            .grid {
+                display: flex;
+                flex-direction: column;
+                background-color: #28353e;
+
+                width: 260px;
+                height: 260px;
+
+                border-radius: 35px;
+                border: 6.2px solid #28353e;
+                box-sizing: border-box;
+                overflow: hidden;
+                gap: 6.2px;
+            }
+            .row {
+                display: flex;
+                flex-direction: row;
+
+                flex-grow: 1;
+                gap: 6.2px;
+            }
+            .cell {
+                background-color: white;
+
+                flex-grow: 1;
+            }
+            .red, .lightred {
+                &:after {
+                    content: "";
+                    width: 100%;
+                    height: 100%;
+                    display: block;
+                }
+            }
+            .red:after {
+                background: linear-gradient(rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.87));
+            }
+            .lightred:after {
+                background: linear-gradient(rgba(255, 0, 0, 0.3), rgba(255, 0, 0, 0.46));
+            }
+            .black {
+                background: linear-gradient(#38434f, #232f38);
+            }
+        </style>
+        <script>
+            var seed = Math.floor(Math.random() * 1000) / 1000;
+            seed = 0.091;
+            function random() {
+                var x = Math.sin(seed++) * 10000;
+                return x - Math.floor(x);
+            }
+            console.log(seed);
+            window.onload = () => {
+                const blankCells = document.querySelectorAll('.cell:not(.black)');
+                for (let i = 0; i < blankCells.length; i++) {
+                    if (random() < 0.6) {
+                        continue;
+                    }
+                    if (random() < 0.5) {
+                        blankCells[i].classList.add('red');
+                    } else {
+                        blankCells[i].classList.add('lightred');
+                    }
+                }
+            };
+        </script>
+    </head>
+    <body>
+        <div class="grid">
+            <div class="row">
+                <div class="cell black"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell black"></div>
+            </div>
+            <div class="row">
+                <div class="cell black"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell black"></div>
+                <div class="cell"></div>
+                <div class="cell black"></div>
+                <div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell black"></div>
+            </div>
+            <div class="row">
+                <div class="cell black"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell black"></div>
+            </div>
+        </div>
+    </body>
+</html>
