@@ -1,26 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <?php
-            // Respects 'Request Desktop Site'
-			if (preg_match("/(iPhone|iPod|iPad|Android|BlackBerry)/i", $_SERVER["HTTP_USER_AGENT"])) {
-				?><meta name="viewport" content="width=device-width, initial-scale=1.0"><?php
-			}
-
-            include("php/secret.php");
-
-            $PDO = getDatabase();
-            $historical_crosswords = $PDO->prepare(
-                "SELECT min(`date`) as min_date, max(`date`) as max_date
-                FROM historical_crosswords"
-            );
-            $historical_crosswords->execute();
-            $date_info = $historical_crosswords->fetch();
-        ?>
         <title>Crossword Grid Builder</title>
-        <link rel="stylesheet" type="text/css" href="main.css">
-        <script src="main.js"></script>
 
+        <!-- Meta tags -->
+        <meta name="robots" content="index, follow, archive">
+        <meta name="description" content="Design crossword grids by leaning on the shoulders of giants with a historic heatmap of NYTimes crossword grid patterns!">
+        <meta charset="utf-8" />
+        <meta http-equiv="Cache-control" content="public">
+
+        <!-- Semantic Markup -->
+        <meta property="og:title" content="Crossword Grid Builder">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="https://alexbeals.com/projects/catan/assets/preview.png">
+        <meta property="og:url" content="https://alexbeals.com/projects/crossword">
+        <meta property="og:description" content="Design crossword grids by leaning on the shoulders of giants with a historic heatmap of NYTimes crossword grid patterns!">
+
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:creator" content="@alex_beals">
+
+        <!-- Favicons -->
         <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png">
         <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon/favicon-32x32.png">
         <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicon/favicon-16x16.png">
@@ -30,7 +29,16 @@
         <meta name="msapplication-TileColor" content="#b91d47">
         <meta name="msapplication-config" content="./assets/favicon/browserconfig.xml">
         <meta name="theme-color" content="#ffffff">
+        
+        <link rel="stylesheet" type="text/css" href="main.css">
+        <script src="main.js"></script>
 
+        <?php
+            // Respects 'Request Desktop Site'
+			if (preg_match("/(iPhone|iPod|iPad|Android|BlackBerry)/i", $_SERVER["HTTP_USER_AGENT"])) {
+				?><meta name="viewport" content="width=device-width, initial-scale=1.0"><?php
+			}
+        ?>
     </head>
     <body>
         <div class="wrapper">
@@ -89,6 +97,17 @@
                 23
             </button>
         </div>
+        <?php
+            include("php/secret.php");
+
+            $PDO = getDatabase();
+            $historical_crosswords = $PDO->prepare(
+                "SELECT min(`date`) as min_date, max(`date`) as max_date
+                FROM historical_crosswords"
+            );
+            $historical_crosswords->execute();
+            $date_info = $historical_crosswords->fetch();
+        ?>
         <div id="calendar">
             <input type="date" name="minDate" min="<?php echo $date_info['min_date']; ?>" max="<?php echo $date_info['max_date']; ?>" value="<?php echo $date_info['min_date']; ?>" onchange="dateChange()">
             -

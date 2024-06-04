@@ -7,4 +7,4 @@ TODO:
 3. Support different sized grids.
 4. Better UI?
 
-https://realfavicongenerator.net/
+Favicon courtesy of the greatest tool, https://realfavicongenerator.net/.
