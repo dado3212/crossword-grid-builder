@@ -113,9 +113,32 @@ function renderGrid() {
     let numWords = 0;
     let minWordLength = null;
     let currentWordLength = 0;
-    console.log(grid);
     for (let r = 0; r < grid.length; r++) {
         for (let c = 0; c < grid[r].length; c++) {
+            // Black square
+            if (grid[r][c].classList.contains('selected')) {
+                if (currentWordLength != 0) {
+                    numWords += 1;
+                    if (minWordLength == null || currentWordLength < minWordLength) {
+                        minWordLength = currentWordLength;
+                    }
+                    currentWordLength = 0;
+                }
+            // White square
+            } else {
+                currentWordLength += 1;
+            }
+        }
+        if (currentWordLength != 0) {
+            numWords += 1;
+            if (minWordLength == null || currentWordLength < minWordLength) {
+                minWordLength = currentWordLength;
+            }
+            currentWordLength = 0;
+        }
+    }
+    for (let c = 0; c < grid[0].length; c++) {
+        for (let r = 0; r < grid.length; r++) {
             // Black square
             if (grid[r][c].classList.contains('selected')) {
                 if (currentWordLength != 0) {
