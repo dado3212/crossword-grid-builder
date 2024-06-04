@@ -73,8 +73,6 @@ function renderGrid() {
     let max = 0;
     let numGrids = 0;
 
-    document.querySelector('#gridInfo #blocks').innerHTML = numBlocks;
-
     // Calculate the summed occurrences
     for (let i = 0; i < historicalGrids.length; i++) {
         let tempGrid = historicalGrids[i];
@@ -109,6 +107,39 @@ function renderGrid() {
     }
     // Update the max num display
     document.getElementById('num').innerHTML = numGrids + ' historical grids matching.';
+
+    // Update the options view
+    document.querySelector('#gridInfo #blocks').innerHTML = numBlocks;
+    let numWords = 0;
+    let minWordLength = null;
+    let currentWordLength = 0;
+    console.log(grid);
+    for (let r = 0; r < grid.length; r++) {
+        for (let c = 0; c < grid[r].length; c++) {
+            // Black square
+            if (grid[r][c].classList.contains('selected')) {
+                if (currentWordLength != 0) {
+                    numWords += 1;
+                    if (minWordLength == null || currentWordLength < minWordLength) {
+                        minWordLength = currentWordLength;
+                    }
+                    currentWordLength = 0;
+                }
+            // White square
+            } else {
+                currentWordLength += 1;
+            }
+        }
+        if (currentWordLength != 0) {
+            numWords += 1;
+            if (minWordLength == null || currentWordLength < minWordLength) {
+                minWordLength = currentWordLength;
+            }
+            currentWordLength = 0;
+        }
+    }
+    document.querySelector('#gridInfo #words').innerHTML = numWords;
+    document.querySelector('#gridInfo #valid').innerHTML = (minWordLength >= 3 ? 'Yes' : 'No');
 }
 
 function optionClick(option) {
