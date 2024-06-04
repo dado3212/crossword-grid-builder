@@ -32,6 +32,14 @@
         
         <link rel="stylesheet" type="text/css" href="main.css">
         <script src="main.js"></script>
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-M15SP790QM"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-M15SP790QM');
+        </script>
 
         <?php
             // Respects 'Request Desktop Site'
