@@ -182,10 +182,7 @@ function updateDates(button) {
     maxDate = document.querySelector('#calendar input[name="maxDate"]').value;
 
     // Fetch the historical grids info
-    fetchHistoricGrids((grids) => {
-        historicalGrids = grids;
-        renderGrid();
-    });
+    fetchHistoricGrids();
 }
 
 function showHeatmapClick(checkbox) {
@@ -237,10 +234,7 @@ function dayClick(day) {
     }
 
     // Fetch the historical grids info
-    fetchHistoricGrids((grids) => {
-        historicalGrids = grids;
-        renderGrid();
-    });
+    fetchHistoricGrids();
 }
 
 function gridSizeClick(gridSize) {
@@ -257,10 +251,7 @@ function gridSizeClick(gridSize) {
     // Fetch the historical grids info
     grid_size = parseInt(gridSize.dataset.size);
     buildGrid();
-    fetchHistoricGrids((grids) => {
-        historicalGrids = grids;
-        renderGrid();
-    });
+    fetchHistoricGrids();
 }
 
 function getCorrespondingCell(cell) {
@@ -312,7 +303,7 @@ function gridCellHoverChange(cell, isHovered) {
     }
 }
 
-function fetchHistoricGrids(callback) {
+function fetchHistoricGrids() {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'php/historical_data.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -328,7 +319,14 @@ function fetchHistoricGrids(callback) {
                 // }
                 // errorDiv.style.display = 'block';
             } else {
-                callback(JSON.parse(data.target.response)['grids']);
+                const info = JSON.parse(data.target.response);
+                historicalGrids = info['grids'];
+                const wordRange = info['word_range'];
+                document.querySelector('#gridInfo #words').title = wordRange[0] + ' - ' + wordRange[1];
+                const blockRange = info['block_range'];
+                document.querySelector('#gridInfo #blocks').title = blockRange[0] + ' - ' + blockRange[1];
+
+                renderGrid();
 
                 // try {
                 //     const bingoIndex = JSON.parse(data.target.response)['index'];
@@ -357,10 +355,7 @@ window.onload = () => {
     maxDate = document.querySelector('#calendar input[name="maxDate"]').value;
 
     // Fetch the historical grids info
-    fetchHistoricGrids((grids) => {
-        historicalGrids = grids;
-        renderGrid();
-    });
+    fetchHistoricGrids();
 
     // Build the grid, both UI and code
     buildGrid();

@@ -25,6 +25,21 @@
         echo json_encode($errorInfo);
     }
 
+    // Source: https://stackoverflow.com/a/46227341/3951475
+    function getPercentile($array, $percentile) {
+        $percentile = min(100, max(0, $percentile));
+        $array = array_values($array);
+        sort($array);
+        $index = ($percentile / 100) * (count($array) - 1);
+        $fractionPart = $index - floor($index);
+        $intPart = floor($index);
+
+        $percentile = $array[$intPart];
+        $percentile += ($fractionPart > 0) ? $fractionPart * ($array[$intPart + 1] - $array[$intPart]) : 0;
+
+        return $percentile;
+    }
+
      // Make sure it's post only
      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
         returnBadRequest('Invalid request method. Please use POST.');
@@ -67,7 +82,9 @@
             `grid`,
             `day_of_week`,
             `rows`,
-            `columns`
+            `columns`,
+            `words`,
+            `blocks`
         FROM historical_crosswords
         WHERE
             `day_of_week` = :day
@@ -83,7 +100,12 @@
     $historical_crosswords->execute();
 
     $crossword_data = [];
+    $words = [];
+    $blocks = [];
     foreach ($historical_crosswords->fetchAll() as $crossword) {
+        $words[] = (int)$crossword['words'];
+        $blocks[] = (int)$crossword['blocks'];
+
         $grid = [];
         $row_index = -1;
         for ($i = 0; $i < strlen($crossword['grid']); $i++) {
@@ -108,6 +130,8 @@
     $errorInfo = array(
         'status' => 200,
         'grids' => $crossword_data,
+        'word_range' => [getPercentile($words, 10), getPercentile($words, 90)],
+        'block_range' => [getPercentile($blocks, 10), getPercentile($blocks, 90)],
     );
 
     // Convert the array to a JSON string and output it

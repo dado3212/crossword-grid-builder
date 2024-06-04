@@ -8,8 +8,6 @@
 			}
 
             include("php/secret.php");
-            error_reporting(E_ALL);
-            ini_set('display_errors', 'On');
 
             $PDO = getDatabase();
             $historical_crosswords = $PDO->prepare(
@@ -18,8 +16,6 @@
             );
             $historical_crosswords->execute();
             $date_info = $historical_crosswords->fetch();
-        
-            echo print_r(var_export($historical_crosswords->fetch(), true));     
         ?>
         <title>Crossword Grid Builder</title>
         <link rel="stylesheet" type="text/css" href="main.css">
