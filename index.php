@@ -6,8 +6,22 @@
 			if (preg_match("/(iPhone|iPod|iPad|Android|BlackBerry)/i", $_SERVER["HTTP_USER_AGENT"])) {
 				?><meta name="viewport" content="width=device-width, initial-scale=1.0"><?php
 			}
+
+            include("php/secret.php");
+            error_reporting(E_ALL);
+            ini_set('display_errors', 'On');
+
+            $PDO = getDatabase();
+            $historical_crosswords = $PDO->prepare(
+                "SELECT min(`date`) as min_date, max(`date`) as max_date
+                FROM historical_crosswords"
+            );
+            $historical_crosswords->execute();
+            $date_info = $historical_crosswords->fetch();
+        
+            echo print_r(var_export($historical_crosswords->fetch(), true));     
         ?>
-        <title>Crossword Builder</title>
+        <title>Crossword Grid Builder</title>
         <link rel="stylesheet" type="text/css" href="main.css">
         <script src="main.js"></script>
     </head>
@@ -23,10 +37,10 @@
                 </table>
                 <div>Symmetry</div>
                 <!-- TODO: Add in proper icons for this -->
-                <button title="Rotational" class="selected" data-format="0" onclick="optionClick(this)">
+                <button title="Rotational" class="selected" data-format="0" onclick="selectionTypeClick(this)">
                     Rotational
                 </button>
-                <button title="Mirror" data-format="1" onclick="optionClick(this)">
+                <button title="Mirror" data-format="1" onclick="selectionTypeClick(this)">
                     Mirror
                 </button>
                 <br />
@@ -34,9 +48,6 @@
                 <input type="checkbox" name="heatmap" value="heatmap" checked onclick="showHeatmapClick(this)">
 
             </div>
-        </div>
-        <div id="options">
-            <!-- TODO: Choose a specific date range? Pre-WS? -->
         </div>
         <div id="date">
             <div>Day of the Week</div>
@@ -62,7 +73,6 @@
                 Su
             </button>
         </div>
-        <div id="num"></div>
         <div id="gridSize" style="display: none;">
             <button data-size="21" class="selected" onclick="gridSizeClick(this)">
                 21
@@ -71,5 +81,12 @@
                 23
             </button>
         </div>
+        <div id="calendar">
+            <input type="date" name="minDate" min="<?php echo $date_info['min_date']; ?>" max="<?php echo $date_info['max_date']; ?>" value="<?php echo $date_info['min_date']; ?>" onchange="dateChange()">
+            -
+            <input type="date" name="maxDate" min="<?php echo $date_info['min_date']; ?>" max="<?php echo $date_info['max_date']; ?>" value="<?php echo $date_info['max_date']; ?>" onchange="dateChange()">
+            <button onclick="updateDates(this)" disabled>⟳</button>
+        </div>
+        <div id="num"></div>
     </body>
 </html>

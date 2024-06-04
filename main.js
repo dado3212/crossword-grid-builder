@@ -10,6 +10,8 @@ let day_of_week = 'Monday';
 let grid_size = 15;
 let numBlocks = 0;
 let showHeatmap = true;
+let minDate;
+let maxDate;
 
 let historicalGrids = [];
 
@@ -166,6 +168,24 @@ function renderGrid() {
     }
     document.querySelector('#gridInfo #words').innerHTML = numWords;
     document.querySelector('#gridInfo #valid').innerHTML = (minWordLength >= 3 ? 'Yes' : 'No');
+    document.querySelector('#gridInfo #valid').className = (minWordLength >= 3 ? 'valid' : 'invalid');
+}
+
+function dateChange() {
+    document.querySelector('#calendar button').disabled = false;
+}
+
+function updateDates(button) {
+    // Disable the button, it should only work after
+    button.disabled = true;
+    minDate = document.querySelector('#calendar input[name="minDate"]').value;
+    maxDate = document.querySelector('#calendar input[name="maxDate"]').value;
+
+    // Fetch the historical grids info
+    fetchHistoricGrids((grids) => {
+        historicalGrids = grids;
+        renderGrid();
+    });
 }
 
 function showHeatmapClick(checkbox) {
@@ -174,8 +194,8 @@ function showHeatmapClick(checkbox) {
     renderGrid();
 }
 
-function optionClick(option) {
-    if (option.classList.contains('selected')) {
+function selectionTypeClick(selectionType) {
+    if (selectionType.classList.contains('selected')) {
         // Do nothing if it's already selected
         return;
     }
@@ -183,10 +203,10 @@ function optionClick(option) {
     // Clear the others as selected and select the new choise
     // TODO: Should this just be a radio button?
     document.querySelectorAll('#gridInfo button').forEach((e) => e.classList.remove('selected'));
-    option.classList.add('selected');
+    selectionType.classList.add('selected');
 
     // TODO: Yikes
-    format = parseInt(option.dataset.format);
+    format = parseInt(selectionType.dataset.format);
 }
 
 function dayClick(day) {
@@ -329,10 +349,13 @@ function fetchHistoricGrids(callback) {
             }
         }
     }
-    xhr.send('day=' + day_of_week + '&size=' + grid_size);
+    xhr.send('day=' + day_of_week + '&size=' + grid_size + '&minDate=' + minDate + '&maxDate=' + maxDate);
 }
 
 window.onload = () => {
+    minDate = document.querySelector('#calendar input[name="minDate"]').value;
+    maxDate = document.querySelector('#calendar input[name="maxDate"]').value;
+
     // Fetch the historical grids info
     fetchHistoricGrids((grids) => {
         historicalGrids = grids;

@@ -26,6 +26,20 @@
     input {
         cursor: pointer;
     }
+
+    #valid {
+        padding: 2px 0;
+        width: 40px;
+        text-align: center;
+
+        &.valid {
+            background-color: #4e9a2699;
+        }
+
+        &.invalid {
+            background-color: #ac121273;
+        }
+    }
 }
 
 #grid {
@@ -67,7 +81,15 @@
     display: none;
 }
 
-button {
+#calendar {
+    margin: 3px 0;
+
+    button {
+        font-size: 1.1em;
+    }
+}
+
+button:not(:disabled) {
     cursor: pointer;
 }
 

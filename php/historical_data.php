@@ -49,6 +49,18 @@
         exit;
     }
 
+    $min_date = $_POST['minDate'] ?? '';
+    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $min_date)) {
+        returnBadRequest('Provided min date is not a date.');
+        exit;
+    }
+
+    $max_date = $_POST['maxDate'] ?? '';
+    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $max_date)) {
+        returnBadRequest('Provided max date is not a date.');
+        exit;
+    }
+
     $PDO = getDatabase();
     $historical_crosswords = $PDO->prepare(
         "SELECT 
@@ -60,10 +72,14 @@
         WHERE
             `day_of_week` = :day
             AND `rows` = :size
-            AND `columns` = `rows`"
+            AND `columns` = `rows`
+            AND `date` >= :minDate
+            AND `date` <= :maxDate"
     );
     $historical_crosswords->bindValue(":day", $day, PDO::PARAM_STR);
     $historical_crosswords->bindValue(":size", $size, PDO::PARAM_INT);
+    $historical_crosswords->bindValue(":minDate", $min_date, PDO::PARAM_STR);
+    $historical_crosswords->bindValue(":maxDate", $max_date, PDO::PARAM_STR);
     $historical_crosswords->execute();
 
     $crossword_data = [];
