@@ -42,7 +42,12 @@
         returnBadRequest('Provided day is not a valid day of the week.');
         exit;
     }
-    
+
+    $size = (int)($_POST['size'] ?? 0);
+    if (!in_array($size, [21, 23, 15])) {
+        returnBadRequest('Provided size is a non-supported size.');
+        exit;
+    }
 
     $PDO = getDatabase();
     $historical_crosswords = $PDO->prepare(
@@ -54,9 +59,11 @@
         FROM historical_crosswords
         WHERE
             `day_of_week` = :day
-            AND `rows` = 15"
+            AND `rows` = :size
+            AND `columns` = `rows`"
     );
     $historical_crosswords->bindValue(":day", $day, PDO::PARAM_STR);
+    $historical_crosswords->bindValue(":size", $size, PDO::PARAM_INT);
     $historical_crosswords->execute();
 
     $crossword_data = [];

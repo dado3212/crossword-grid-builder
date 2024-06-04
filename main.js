@@ -6,14 +6,47 @@ const formattingStates = {
 };
 
 let format = formattingStates.ROTATIONAL;
+let day_of_week = 'Monday';
+let grid_size = 15;
 
 let historicalGrids = [];
 
+function buildGrid() {
+    // Build the grid, both UI and code
+    const gridElement = document.getElementById('grid');
+    gridElement.innerHTML = '';
+    grid = [];
+    for (let r = 0; r < grid_size; r++) {
+        // UI
+        let row = document.createElement('div');
+        row.classList.add('row');
+        gridElement.appendChild(row);
+
+        // Code
+        grid.push([]);
+        for (let c = 0; c < grid_size; c++) {
+            // UI
+            let cell = document.createElement('div');
+            cell.classList.add('cell');
+            cell.dataset.row = r;
+            cell.dataset.col = c;
+            cell.addEventListener('click', (_) => gridCellClick(cell));
+            cell.addEventListener('mouseover', (_) => gridCellHoverChange(cell, true));
+            cell.addEventListener('mouseout', (_) => gridCellHoverChange(cell, false));
+
+            row.appendChild(cell);
+
+            // Code
+            grid[r].push(cell);
+        }
+    }
+}
+
 function createEmptyGrid() {
     const emptyGrid = [];
-    for (let r = 0; r < 15; r++) {
+    for (let r = 0; r < grid_size; r++) {
         emptyGrid.push([]);
-        for (let c = 0; c < 15; c++) {
+        for (let c = 0; c < grid_size; c++) {
             emptyGrid[r].push(0);
         }
     }
@@ -23,8 +56,8 @@ function createEmptyGrid() {
 // For a given historical grid it checks it against the currently selected
 // grid and returns a boolean if it's still a plausible end state
 function isValidHistoricalGrid(historicalGrid) {
-    for (let r = 0; r < 15; r++) {
-        for (let c = 0; c < 15; c++) {
+    for (let r = 0; r < grid_size; r++) {
+        for (let c = 0; c < grid_size; c++) {
             if (grid[r][c].classList.contains('selected') &&  !historicalGrid[r][c]) {
                 return false;
             }
@@ -75,7 +108,6 @@ function renderGrid() {
 }
 
 function optionClick(option) {
-    console.log(option.innerHTML);
     if (option.classList.contains('selected')) {
         // Do nothing if it's already selected
         return;
@@ -101,8 +133,47 @@ function dayClick(day) {
     document.querySelectorAll('#date button').forEach((e) => e.classList.remove('selected'));
     day.classList.add('selected');
 
-    historicalGrids = JSON.parse(historicalCrosswords)[day.dataset.day];
-    renderGrid();
+    day_of_week = day.dataset.day;
+    // Adjust whether the size selector is set
+    if (day_of_week === 'Sunday') {
+        grid_size = 21;
+        document.querySelectorAll('#gridSize button').forEach((e) => e.classList.remove('selected'));
+        document.querySelector('#gridSize button[data-size="21"]').classList.add('selected');
+        document.getElementById('gridSize').style.display = 'block';
+        buildGrid();
+    } else {
+        if (grid_size != 15) {
+            grid_size = 15;
+            document.getElementById('gridSize').style.display = 'none';
+            buildGrid();
+        }
+    }
+
+    // Fetch the historical grids info
+    fetchHistoricGrids((grids) => {
+        historicalGrids = grids;
+        renderGrid();
+    });
+}
+
+function gridSizeClick(gridSize) {
+    if (gridSize.classList.contains('selected')) {
+        // Do nothing if it's already selected
+        return;
+    }
+
+    // Clear the others as selected and select the new choise
+    // TODO: Should this just be a radio button?
+    document.querySelectorAll('#gridSize button').forEach((e) => e.classList.remove('selected'));
+    gridSize.classList.add('selected');
+
+    // Fetch the historical grids info
+    grid_size = parseInt(gridSize.dataset.size);
+    buildGrid();
+    fetchHistoricGrids((grids) => {
+        historicalGrids = grids;
+        renderGrid();
+    });
 }
 
 function getCorrespondingCell(cell) {
@@ -111,10 +182,10 @@ function getCorrespondingCell(cell) {
     let otherCell;
     switch (format) {
         case formattingStates.ROTATIONAL:
-            otherCell = grid[15 - cell.dataset.row - 1][15 - cell.dataset.col - 1];
+            otherCell = grid[grid_size - cell.dataset.row - 1][grid_size - cell.dataset.col - 1];
             break;
         case formattingStates.MIRROR:
-            otherCell = grid[cell.dataset.row][15 - cell.dataset.col - 1];
+            otherCell = grid[cell.dataset.row][grid_size - cell.dataset.col - 1];
             break;
     }
     return otherCell;
@@ -146,7 +217,7 @@ function gridCellHoverChange(cell, isHovered) {
     }
 }
 
-function fetchHistoricGrids(day_of_week, callback) {
+function fetchHistoricGrids(callback) {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'php/historical_data.php', true);
     xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
@@ -183,42 +254,18 @@ function fetchHistoricGrids(day_of_week, callback) {
             }
         }
     }
-    xhr.send('day=' + day_of_week);
+    xhr.send('day=' + day_of_week + '&size=' + grid_size);
 }
 
 window.onload = () => {
     // Fetch the historical grids info
-    fetchHistoricGrids('Monday', (grids) => {
+    fetchHistoricGrids((grids) => {
         historicalGrids = grids;
         renderGrid();
     });
 
     // Build the grid, both UI and code
-    const gridElement = document.getElementById('grid');
-    for (let r = 0; r < 15; r++) {
-        // UI
-        let row = document.createElement('div');
-        row.classList.add('row');
-        gridElement.appendChild(row);
-
-        // Code
-        grid.push([]);
-        for (let c = 0; c < 15; c++) {
-            // UI
-            let cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.dataset.row = r;
-            cell.dataset.col = c;
-            cell.addEventListener('click', (_) => gridCellClick(cell));
-            cell.addEventListener('mouseover', (_) => gridCellHoverChange(cell, true));
-            cell.addEventListener('mouseout', (_) => gridCellHoverChange(cell, false));
-
-            row.appendChild(cell);
-
-            // Code
-            grid[r].push(cell);
-        }
-    }
+    buildGrid();
 
     renderGrid();
 };

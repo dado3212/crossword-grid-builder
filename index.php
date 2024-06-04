@@ -49,5 +49,13 @@
             </button>
         </div>
         <div id="num"></div>
+        <div id="gridSize" style="display: none;">
+            <button data-size="21" class="selected" onclick="gridSizeClick(this)">
+                21
+            </button>
+            <button data-size="23" onclick="gridSizeClick(this)">
+                23
+            </button>
+        </div>
     </body>
 </html>

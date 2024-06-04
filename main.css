@@ -2,7 +2,7 @@
     border: 1px solid black;
     display: flex;
     flex-direction: column;
-    width: calc((15px + 1px * 2) * 15);
+    width: fit-content;
 }
 
 .row {
