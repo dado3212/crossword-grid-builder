@@ -17,23 +17,26 @@
             </div>
             <div id="gridInfo">
                 <table>
-                    <tr><td>Is Valid</td><td id="valid">Yes</td></tr>
-                    <tr><td>Num Words</td><td id="words">300</td></tr>
+                    <tr><td>Num Words</td><td id="words">0</td></tr>
                     <tr><td>Num Blocks</td><td id="blocks">0</td></tr>
+                    <tr><td>Is Valid</td><td id="valid">Yes</td></tr>
                 </table>
+                <div>Symmetry</div>
+                <!-- TODO: Add in proper icons for this -->
+                <button title="Rotational" class="selected" data-format="0" onclick="optionClick(this)">
+                    Rotational
+                </button>
+                <button title="Mirror" data-format="1" onclick="optionClick(this)">
+                    Mirror
+                </button>
+                <br />
+                <label for="heatmap">Show Heatmap</label>
+                <input type="checkbox" name="heatmap" value="heatmap" checked onclick="showHeatmapClick(this)">
+
             </div>
         </div>
         <div id="options">
-            <!-- TODO: Disable the historical view -->
             <!-- TODO: Choose a specific date range? Pre-WS? -->
-            <div>Symmetry</div>
-            <!-- TODO: Add in proper icons for this -->
-            <button title="Rotational" class="selected" data-format="0" onclick="optionClick(this)">
-                Rotational
-            </button>
-            <button title="Mirror" data-format="1" onclick="optionClick(this)">
-                Mirror
-            </button>
         </div>
         <div id="date">
             <div>Day of the Week</div>

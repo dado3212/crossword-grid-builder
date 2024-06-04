@@ -9,6 +9,7 @@ let format = formattingStates.ROTATIONAL;
 let day_of_week = 'Monday';
 let grid_size = 15;
 let numBlocks = 0;
+let showHeatmap = true;
 
 let historicalGrids = [];
 
@@ -94,15 +95,17 @@ function renderGrid() {
     }
     // Delete the old rendering
     document.querySelectorAll('.popularity-display').forEach((e) => e.remove());
-    // Render out the new ones, normalized
-    for (let r = 0; r < status.length; r++) {
-        for (let c = 0; c < status[r].length; c++) {
-            const perc = status[r][c] / max;
+    if (showHeatmap) {
+        // Render out the new ones, normalized
+        for (let r = 0; r < status.length; r++) {
+            for (let c = 0; c < status[r].length; c++) {
+                const perc = status[r][c] / max;
 
-            let popularityDisplay = document.createElement('div');
-            popularityDisplay.classList.add('popularity-display');
-            popularityDisplay.style.backgroundColor = 'rgba(255, 0, 0, ' + perc + ')';
-            grid[r][c].appendChild(popularityDisplay);
+                let popularityDisplay = document.createElement('div');
+                popularityDisplay.classList.add('popularity-display');
+                popularityDisplay.style.backgroundColor = 'rgba(255, 0, 0, ' + perc + ')';
+                grid[r][c].appendChild(popularityDisplay);
+            }
         }
     }
     // Update the max num display
@@ -165,6 +168,12 @@ function renderGrid() {
     document.querySelector('#gridInfo #valid').innerHTML = (minWordLength >= 3 ? 'Yes' : 'No');
 }
 
+function showHeatmapClick(checkbox) {
+    showHeatmap = checkbox.checked;
+
+    renderGrid();
+}
+
 function optionClick(option) {
     if (option.classList.contains('selected')) {
         // Do nothing if it's already selected
@@ -173,7 +182,7 @@ function optionClick(option) {
 
     // Clear the others as selected and select the new choise
     // TODO: Should this just be a radio button?
-    document.querySelectorAll('#options button').forEach((e) => e.classList.remove('selected'));
+    document.querySelectorAll('#gridInfo button').forEach((e) => e.classList.remove('selected'));
     option.classList.add('selected');
 
     // TODO: Yikes

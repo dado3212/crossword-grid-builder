@@ -1,5 +1,31 @@
 .wrapper {
     display: flex;
+    align-items: flex-start;
+}
+
+#gridInfo {
+    border: 2px solid black;
+
+    margin-left: 10px;
+    padding: 5px;
+
+    table {
+        width: 100%;
+    }
+
+    tbody {
+        display: flex;
+        flex-direction: column;
+
+        tr {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    input {
+        cursor: pointer;
+    }
 }
 
 #grid {
