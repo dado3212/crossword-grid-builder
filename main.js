@@ -83,7 +83,7 @@ function renderGrid() {
         numGrids += 1;
         for (let r = 0; r < tempGrid.length; r++) {
             for (let c = 0; c < tempGrid[r].length; c++) {
-                if (tempGrid[r][c]) {
+                if (tempGrid[r][c] && !grid[r][c].classList.contains('selected')) {
                     status[r][c] += 1;
                     if (status[r][c] > max) {
                         max = status[r][c];
