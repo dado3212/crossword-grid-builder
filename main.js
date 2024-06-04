@@ -8,6 +8,7 @@ const formattingStates = {
 let format = formattingStates.ROTATIONAL;
 let day_of_week = 'Monday';
 let grid_size = 15;
+let numBlocks = 0;
 
 let historicalGrids = [];
 
@@ -16,6 +17,7 @@ function buildGrid() {
     const gridElement = document.getElementById('grid');
     gridElement.innerHTML = '';
     grid = [];
+    numBlocks = 0;
     for (let r = 0; r < grid_size; r++) {
         // UI
         let row = document.createElement('div');
@@ -70,6 +72,8 @@ function renderGrid() {
     let status = createEmptyGrid();
     let max = 0;
     let numGrids = 0;
+
+    document.querySelector('#gridInfo #blocks').innerHTML = numBlocks;
 
     // Calculate the summed occurrences
     for (let i = 0; i < historicalGrids.length; i++) {
@@ -199,9 +203,17 @@ function gridCellClick(cell) {
     let otherCell = getCorrespondingCell(cell);
 
     if (newState) {
-        otherCell.classList.add('selected');
+        numBlocks += 1;
+        if (cell !== otherCell) {
+            otherCell.classList.add('selected');
+            numBlocks += 1;
+        }
     } else {
-        otherCell.classList.remove('selected');
+        numBlocks -= 1;
+        if (cell !== otherCell) {
+            otherCell.classList.remove('selected');
+            numBlocks -= 1;
+        }
     }
     renderGrid();
 }

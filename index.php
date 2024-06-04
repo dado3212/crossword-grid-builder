@@ -12,9 +12,20 @@
         <script src="main.js"></script>
     </head>
     <body>
-        <div id="grid">
+        <div class="wrapper">
+            <div id="grid">
+            </div>
+            <div id="gridInfo">
+                <table>
+                    <tr><td>Is Valid</td><td id="valid">Yes</td></tr>
+                    <tr><td>Num Words</td><td id="words">300</td></tr>
+                    <tr><td>Num Blocks</td><td id="blocks">0</td></tr>
+                </table>
+            </div>
         </div>
         <div id="options">
+            <!-- TODO: Disable the historical view -->
+            <!-- TODO: Choose a specific date range? Pre-WS? -->
             <div>Symmetry</div>
             <!-- TODO: Add in proper icons for this -->
             <button title="Rotational" class="selected" data-format="0" onclick="optionClick(this)">
