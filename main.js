@@ -337,7 +337,6 @@ function fetchHistoricGrids() {
                 loadingElement.classList.add('error');
             } else {
                 loadingElement.style.display = 'none';
-                console.log(data.target.response);
                 const info = JSON.parse(data.target.response);
                 // Decode the base64 encoded grids
                 const properGrids = [];
