@@ -1,6 +1,6 @@
 # <img src="/assets/favicon/android-chrome-192x192.png?raw=true" width="30" alt="Logo"/> Crossword Grid Builder
 
-I've been getting into crossword constructing, but found the initial process staring at a blank 15x15 grid to be one of my least favorite parts. This tool allows you to build a grid by leveraging all of the grid patterns for all NYTimes puzzles ever, in a heatmap. As you place black squares into the grid it will update the heatmap to only show grids that include those black squares.
+I've been getting into crossword constructing, but found the initial process staring at a blank 15x15 grid to be one of my least favorite parts. This tool allows you to build a grid by leveraging all of the grid patterns for all NYTimes puzzles ever, in a heatmap. As you place black squares into the grid it will update the heatmap to only show grids that include those black squares (though ideally you should diverge from history: 70% of puzzle grids have never been used before).
 
 <img src="/assets/preview.png?raw=true" height="300" alt="Preview"/>
 
