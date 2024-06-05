@@ -126,6 +126,7 @@
     http_response_code(200);
     // Set the Content-Type header to application/json
     header('Content-Type: application/json');
+    header('Content-Encoding: gzip');
     // Create an array with the error message
     $errorInfo = array(
         'status' => 200,
@@ -135,5 +136,5 @@
     );
 
     // Convert the array to a JSON string and output it
-    echo json_encode($errorInfo);
+    echo gzencode(json_encode($errorInfo));
 ?>
