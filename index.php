@@ -12,7 +12,7 @@
         <!-- Semantic Markup -->
         <meta property="og:title" content="Crossword Grid Builder">
         <meta property="og:type" content="website">
-        <meta property="og:image" content="https://alexbeals.com/projects/catan/assets/preview.png">
+        <meta property="og:image" content="https://alexbeals.com/projects/crossword/assets/preview.png">
         <meta property="og:url" content="https://alexbeals.com/projects/crossword">
         <meta property="og:description" content="Design crossword grids by leaning on the shoulders of giants with a historic heatmap of NYTimes crossword grid patterns!">
 
