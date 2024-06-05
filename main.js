@@ -15,6 +15,23 @@ let maxDate;
 
 let historicalGrids = [];
 
+function decodeBinary(base64String) {
+    const binaryString = atob(base64String);
+
+    // Convert binary string to byte array
+    const byteArray = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        byteArray[i] = binaryString.charCodeAt(i);
+    }
+
+    // Convert byte array back to the original binary format (if needed)
+    let originalBinaryString = '';
+    for (let byte of byteArray) {
+        originalBinaryString += byte.toString(2).padStart(8, '0');
+    }
+    return originalBinaryString;
+}
+
 function buildGrid() {
     // Build the grid, both UI and code
     const gridElement = document.getElementById('grid');
@@ -320,9 +337,28 @@ function fetchHistoricGrids() {
                 loadingElement.classList.add('error');
             } else {
                 loadingElement.style.display = 'none';
-
+                console.log(data.target.response);
                 const info = JSON.parse(data.target.response);
-                historicalGrids = info['grids'];
+                // Decode the base64 encoded grids
+                const properGrids = [];
+                for (let i = 0; i < info['grids'].length; i++) {
+                    let tempGrid = [];
+                    let decoded = decodeBinary(info['grids'][i]).substring(0, grid_size ** 2);
+                    let rowIndex = -1;
+                    for (let j = 0; j < decoded.length; j++) {
+                        if (j % grid_size === 0) {
+                            tempGrid.push([]);
+                            rowIndex += 1;
+                        }
+                        if (decoded[j] == '0') {
+                            tempGrid[rowIndex].push(false);
+                        } else {
+                            tempGrid[rowIndex].push(true);
+                        }
+                    }
+                    properGrids.push(tempGrid);
+                }
+                historicalGrids = properGrids;
                 const wordRange = info['word_range'];
                 document.querySelector('#gridInfo #words').title = wordRange[0] + ' - ' + wordRange[1];
                 const blockRange = info['block_range'];

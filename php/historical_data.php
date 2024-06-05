@@ -7,6 +7,16 @@
     error_reporting(E_ALL);
     ini_set('display_errors', 'On');
 
+    function encodeBinaryString($binaryString) {
+        $binaryString .= str_repeat('0', 8 - (strlen($binaryString) % 8));
+        $arr = str_split($binaryString, 8);
+        $str = '';
+        foreach ($arr as $binNumber) {
+            $str .= chr(bindec($binNumber));
+        }
+        return base64_encode($str);
+    }
+
     // Function to return a 400 error code with information
     function returnBadRequest($message) {
         // Set the response code to 400
@@ -108,18 +118,7 @@
 
         $grid = [];
         $row_index = -1;
-        for ($i = 0; $i < strlen($crossword['grid']); $i++) {
-            if ($i % $crossword['rows'] === 0) {
-                $grid[] = [];
-                $row_index += 1;
-            }
-            if ($crossword['grid'][$i] === '0') {
-                $grid[$row_index][] = false;
-            } else {
-                $grid[$row_index][] = true;
-            }
-        }
-        $crossword_data[] = $grid;
+        $crossword_data[] = encodeBinaryString($crossword['grid']);
     }
     
     // Set the response code to 200
