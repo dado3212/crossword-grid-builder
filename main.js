@@ -320,6 +320,18 @@ function gridCellHoverChange(cell, isHovered) {
     }
 }
 
+function editorStartClicked(start) {
+    minDate = start.dataset.start;
+    document.querySelector('#calendar input[name="minDate"]').value = minDate;
+    document.querySelector('#calendar button').disabled = false;
+}
+
+function editorEndClicked(end) {
+    maxDate = end.dataset.end;
+    document.querySelector('#calendar input[name="maxDate"]').value = maxDate;
+    document.querySelector('#calendar button').disabled = false;
+}
+
 function fetchHistoricGrids() {
     // Start the loading indicator
     const loadingElement = document.getElementById('loading');
@@ -373,6 +385,9 @@ function fetchHistoricGrids() {
 window.onload = () => {
     minDate = document.querySelector('#calendar input[name="minDate"]').value;
     maxDate = document.querySelector('#calendar input[name="maxDate"]').value;
+
+    document.querySelectorAll('.editors .start').forEach((e) => e.addEventListener('click', _ => editorStartClicked(e)));
+    document.querySelectorAll('.editors .end').forEach((e) => e.addEventListener('click', _ => editorEndClicked(e)));
 
     // Fetch the historical grids info
     fetchHistoricGrids();

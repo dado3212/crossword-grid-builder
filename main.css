@@ -106,3 +106,38 @@ button:not(:disabled) {
 button.selected {
     background-color: gray;
 }
+
+#num {
+    margin: 10px 0;
+}
+
+.editors {
+    margin-top: 6px;
+
+    .name {
+        font-weight: bold;
+    }
+
+    span {
+        display: inline-block;
+    }
+
+    .num_crosswords {
+        padding-left: 4px;
+    }
+
+    .start, .end {
+        cursor: pointer;
+
+        padding: 1px 4px;
+        margin: 3px;
+        border: 1px solid black;
+        border-radius: 3px;
+
+        transition: 0.1s all;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}

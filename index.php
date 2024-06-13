@@ -73,6 +73,7 @@
                 </div>
             </div>
         </div>
+        <div id="num"></div>
         <div id="date">
             <div>Day of the Week</div>
             <button title="Monday" data-day="Monday" class="selected" onclick="dayClick(this)">
@@ -115,13 +116,37 @@
             );
             $historical_crosswords->execute();
             $date_info = $historical_crosswords->fetch();
+
+            $editors_stmt = $PDO->prepare(
+                "SELECT
+                    editor, min(`date`) as min_date, max(`date`) as max_date, count(*) as num_crosswords
+                FROM historical_crosswords
+                GROUP BY 1
+                HAVING count(*) > 10
+                ORDER BY 2 ASC"
+            );
+            $editors_stmt->execute();
+            $editors = $editors_stmt->fetchAll();
         ?>
         <div id="calendar">
             <input type="date" name="minDate" min="<?php echo $date_info['min_date']; ?>" max="<?php echo $date_info['max_date']; ?>" value="<?php echo $date_info['min_date']; ?>" onchange="dateChange()">
             -
             <input type="date" name="maxDate" min="<?php echo $date_info['min_date']; ?>" max="<?php echo $date_info['max_date']; ?>" value="<?php echo $date_info['max_date']; ?>" onchange="dateChange()">
             <button onclick="updateDates(this)" disabled>⟳</button>
+            <br>
+            <div class="editors">
+                <?php
+                    foreach ($editors as $editor) {
+                        echo '<div class="editor">';
+                        echo '<span class="name">' . $editor['editor'] . '</span>';
+                        echo '<span class="num_crosswords">(' . number_format($editor['num_crosswords'], 0, '', ',') . ')</span>';
+                        echo '<span class="start" data-start="' . $editor['min_date'] . '">' . date('F j, Y', strtotime($editor['min_date'])) . '</span>';
+                        echo '-';
+                        echo '<span class="end" data-end="' . $editor['max_date'] . '">' . date('F j, Y', strtotime($editor['max_date'])) . '</span>';
+                        echo '</div>';
+                    }
+                ?>
+            </div>
         </div>
-        <div id="num"></div>
     </body>
 </html>
