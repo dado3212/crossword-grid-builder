@@ -4,7 +4,7 @@ I've been getting into crossword constructing, but found the initial process sta
 
 <img src="/assets/preview.png?raw=true" height="300" alt="Preview"/>
 
-This is currently live at https://alexbeals.com/projects/crossword/. It works for all days of the week, along with all NYTimes puzzles from the very first puzzle in 1942 up to today's puzzle (currently June 3, 2024 until I update the code to automatically add new ones).
+This is currently live at https://alexbeals.com/projects/crossword/. It works for all days of the week, along with all NYTimes puzzles from the very first puzzle in 1942 up to today's puzzle (updates at 8am PDT every day).
 
 ## Credits
 
