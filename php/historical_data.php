@@ -37,6 +37,9 @@
 
     // Source: https://stackoverflow.com/a/46227341/3951475
     function getPercentile($array, $percentile) {
+        if (count($array) === 0) {
+            return 0;
+        }
         $percentile = min(100, max(0, $percentile));
         $array = array_values($array);
         sort($array);
@@ -121,19 +124,16 @@
         $crossword_data[] = encodeBinaryString($crossword['grid']);
     }
     
-    // Set the response code to 200
     http_response_code(200);
-    // Set the Content-Type header to application/json
     header('Content-Type: application/json');
     header('Content-Encoding: gzip');
-    // Create an array with the error message
-    $errorInfo = array(
+
+    $gridInfo = array(
         'status' => 200,
         'grids' => $crossword_data,
         'word_range' => [getPercentile($words, 10), getPercentile($words, 90)],
         'block_range' => [getPercentile($blocks, 10), getPercentile($blocks, 90)],
     );
 
-    // Convert the array to a JSON string and output it
-    echo gzencode(json_encode($errorInfo));
+    echo gzencode(json_encode($gridInfo));
 ?>
